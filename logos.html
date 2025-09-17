@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Logo Organizer - My Logos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --dark: #333;
+            --light: #f8f9fa;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, var(--danger), #c0392b);
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .logo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .logo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            margin: 0 auto 15px;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-name {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .logo-category {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .logo-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(200%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .page-navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        
+        .page-nav-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-th-large"></i> My Logos</h1>
+        
+        <div class="form-group">
+            <label for="filterCategory">Filter by Category:</label>
+            <select id="filterCategory">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+        
+        <div class="logo-grid" id="logoGrid">
+            <div class="empty-state">
+                <i class="fas fa-icons"></i>
+                <p>No logos yet. Create your first logo!</p>
+            </div>
+        </div>
+        
+        <div class="page-navigation">
+            <a href="index.html" class="page-nav-btn">
+                <i class="fas fa-plus-circle"></i> Create New Logo
+            </a>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data
+            let categories = JSON.parse(localStorage.getItem('logoCategories')) || [];
+            let logos = JSON.parse(localStorage.getItem('personalLogos')) || [];
+            
+            // Filter category
+            const filterCategory = document.getElementById('filterCategory');
+            filterCategory.addEventListener('change', renderLogos);
+            
+            // Initialize
+            updateFilterCategory();
+            renderLogos();
+            
+            // Helper functions
+            function showNotification(message, isError = false) {
+                const notification = document.getElementById('notification');
+                const notificationText = document.getElementById('notificationText');
+                
+                notificationText.textContent = message;
+                notification.className = 'notification';
+                
+                if (isError) {
+                    notification.classList.add('error');
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            function updateFilterCategory() {
+                filterCategory.innerHTML = '<option value="">All Categories</option>';
+                
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = category.name;
+                    filterCategory.appendChild(option);
+                });
+            }
+            
+            function getCategoryColor(categoryName) {
+                const category = categories.find(c => c.name === categoryName);
+                return category ? category.color : 'linear-gradient(135deg, #6a11cb, #2575fc)';
+            }
+            
+            // Function to extract domain from URL
+            function extractDomain(url) {
+                try {
+                    // If URL doesn't start with http/https, add it
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+                    const domain = new URL(url).hostname;
+                    // Remove www. prefix if exists
+                    return domain.replace(/^www\./, '');
+                } catch (e) {
+                    return '';
+                }
+            }
+            
+            // Function to get favicon URL
+            function getFaviconUrl(domain) {
+                if (!domain) return '';
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            }
+            
+            // Function to check if a URL is from a known service
+            function isKnownService(url) {
+                const domain = extractDomain(url);
+                const knownServices = [
+                    'youtube.com', 'facebook.com', 'twitter.com', 'instagram.com',
+                    'linkedin.com', 'github.com', 'stackoverflow.com', 'leetcode.com',
+                    'amazon.com', 'google.com', 'reddit.com', 'wikipedia.org',
+                    'netflix.com', 'spotify.com', 'discord.com', 'twitch.tv'
+                ];
+                
+                return knownServices.includes(domain);
+            }
+            
+            function renderLogos() {
+                const logoGrid = document.getElementById('logoGrid');
+                const filterValue = filterCategory.value;
+                
+                let filteredLogos = logos;
+                if (filterValue) {
+                    filteredLogos = logos.filter(logo => logo.category === filterValue);
+                }
+                
+                if (filteredLogos.length === 0) {
+                    logoGrid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-icons"></i>
+                            <p>${filterValue ? 'No logos in this category' : 'No logos yet. Create your first logo!'}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                logoGrid.innerHTML = '';
+                
+                filteredLogos.forEach(logo => {
+                    const logoCard = document.createElement('div');
+                    logoCard.className = 'logo-card';
+                    
+                    // Check if it's a known service or has domain info
+                    const isKnown = logo.isKnownService || isKnownService(logo.url);
+                    const domain = logo.domain || extractDomain(logo.url);
+                    const faviconUrl = getFaviconUrl(domain);
+                    
+                    // Create logo element
+                    let logoContent;
+                    if (isKnown) {
+                        // Use favicon for known services
+                        logoContent = `
+                            <img src="${faviconUrl}" alt="${logo.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">${logo.name.charAt(0)}</span>
+                        `;
+                    } else {
+                        // Use text for other sites
+                        logoContent = `<span>${logo.name.charAt(0)}</span>`;
+                    }
+                    
+                    logoCard.innerHTML = `
+                        <a href="${logo.url}" class="logo" target="_blank" style="${!isKnown ? `background: ${getCategoryColor(logo.category)};` : ''}">
+                            ${logoContent}
+                        </a>
+                        <div class="logo-name">${logo.name}</div>
+                        <div class="logo-category">${logo.category}</div>
+                        <div class="logo-actions">
+                            <button class="btn-small btn-danger" data-id="${logo.id}">Delete</button>
+                        </div>
+                    `;
+                    
+                    logoGrid.appendChild(logoCard);
+                    
+                    // Delete logo button
+                    const deleteBtn = logoCard.querySelector('.btn-danger');
+                    deleteBtn.addEventListener('click', function() {
+                        const logoId = parseInt(this.getAttribute('data-id'));
+                        
+                        logos = logos.filter(l => l.id !== logoId);
+                        localStorage.setItem('personalLogos', JSON.stringify(logos));
+                        renderLogos();
+                        showNotification('Logo deleted successfully!');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Logo Organizer - Create</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff6b6b;
+            --dark: #333;
+            --light: #f8f9fa;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #f44336;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #636e72, #2d3436);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, var(--danger), #c0392b);
+        }
+        
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .category-card {
+            background: linear-gradient(135deg, var(--light), #e9ecef);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .category-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            margin: 0 auto 15px;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(200%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        .notification.warning {
+            background-color: var(--warning);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .category-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px #ddd;
+        }
+        
+        .color-picker-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .color-picker-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s;
+        }
+        
+        .color-picker-display:hover {
+            border-color: var(--primary);
+        }
+        
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
+        
+        .color-value {
+            font-family: monospace;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .color-picker-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            padding: 15px;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .color-picker-dropdown.active {
+            display: block;
+        }
+        
+        .color-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .color-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        
+        .color-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        
+        .color-tab-content {
+            display: none;
+        }
+        
+        .color-tab-content.active {
+            display: block;
+        }
+        
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .swatch:hover {
+            transform: scale(1.1);
+            border-color: #333;
+            z-index: 1;
+        }
+        
+        .swatch.selected {
+            border-color: #333;
+            box-shadow: 0 0 0 2px white, 0 0 0 3px #333;
+        }
+        
+        .gradient-container {
+            margin-bottom: 15px;
+        }
+        
+        .gradient-preview {
+            height: 40px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .gradient-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .gradient-control {
+            flex: 1;
+        }
+        
+        .gradient-control label {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .gradient-control input {
+            padding: 5px;
+            font-size: 14px;
+        }
+        
+        .gradient-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .gradient-preset {
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: all 0.2s;
+        }
+        
+        .gradient-preset:hover {
+            transform: scale(1.05);
+            border-color: #333;
+        }
+        
+        .page-navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        
+        .page-nav-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-preview-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .tab {
+                white-space: nowrap;
+            }
+            
+            .page-navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .swatch-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+            
+            .gradient-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-palette"></i> Personal Logo Organizer</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="create">Create Logo</div>
+            <div class="tab" data-tab="categories">Categories</div>
+        </div>
+        
+        <div class="tab-content active" id="create-tab">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="websiteLink">Website Link:</label>
+                    <input type="text" id="websiteLink" placeholder="https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="logoName">Logo Name:</label>
+                    <input type="text" id="logoName" placeholder="My Website">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="logoCategory">Category:</label>
+                    <select id="logoCategory">
+                        <option value="">Select a category</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newCategory">Or Create New Category:</label>
+                    <input type="text" id="newCategory" placeholder="New category name">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Category Color:</label>
+                <div class="color-picker-container">
+                    <div class="color-picker-display" id="colorPickerDisplay">
+                        <div class="color-preview" id="colorPreview"></div>
+                        <div class="color-value" id="colorValue">linear-gradient(135deg, #6a11cb, #2575fc)</div>
+                        <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
+                    </div>
+                    
+                    <div class="color-picker-dropdown" id="colorPickerDropdown">
+                        <div class="color-tabs">
+                            <div class="color-tab active" data-color-tab="solid">Solid</div>
+                            <div class="color-tab" data-color-tab="gradient">Gradient</div>
+                        </div>
+                        
+                        <div class="color-tab-content active" id="solid-tab">
+                            <div class="swatch-grid" id="solidSwatchGrid">
+                                <!-- Solid color swatches will be generated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="color-tab-content" id="gradient-tab">
+                            <div class="gradient-container">
+                                <div class="gradient-preview" id="gradientPreview"></div>
+                                
+                                <div class="gradient-controls">
+                                    <div class="gradient-control">
+                                        <label>Start Color</label>
+                                        <input type="color" id="gradientStart" value="#6a11cb">
+                                    </div>
+                                    <div class="gradient-control">
+                                        <label>End Color</label>
+                                        <input type="color" id="gradientEnd" value="#2575fc">
+                                    </div>
+                                    <div class="gradient-control">
+                                        <label>Direction</label>
+                                        <select id="gradientDirection">
+                                            <option value="135deg">Diagonal</option>
+                                            <option value="to right">Horizontal</option>
+                                            <option value="to bottom">Vertical</option>
+                                            <option value="45deg">Diagonal Alt</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="gradient-presets" id="gradientPresets">
+                                    <!-- Gradient presets will be generated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="generateBtn">Generate Logo</button>
+            
+            <div class="logo-container" id="logoContainer" style="display: none; margin-top: 30px;">
+                <h3 style="text-align: center; margin-bottom: 20px;">Your New Logo</h3>
+                <div class="logo-preview-container">
+                    <a href="#" id="logoLink" class="logo" target="_blank">
+                        <img id="logoImage" src="" alt="" style="display: none;">
+                        <span id="logoText"></span>
+                    </a>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <p id="logoUrl" style="margin-bottom: 5px;"></p>
+                    <p id="logoCategoryDisplay" style="font-weight: 600;"></p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button id="saveLogoBtn" class="btn-secondary">Save Logo</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="categories-tab">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categoryName">Category Name:</label>
+                    <input type="text" id="categoryName" placeholder="Enter category name">
+                </div>
+                
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button id="addCategoryBtn">Add Category</button>
+                </div>
+            </div>
+            
+            <div class="category-list" id="categoryList">
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No categories yet. Create your first category!</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-navigation">
+            <a href="logos.html" class="page-nav-btn">
+                <i class="fas fa-th-large"></i> View My Logos
+            </a>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data
+            let categories = JSON.parse(localStorage.getItem('logoCategories')) || [];
+            let logos = JSON.parse(localStorage.getItem('personalLogos')) || [];
+            let selectedColor = 'linear-gradient(135deg, #6a11cb, #2575fc)';
+            
+            // Predefined solid colors
+            const solidColors = [
+                '#000000', '#333333', '#666666', '#999999', '#CCCCCC', '#FFFFFF', 
+                '#FF0000', '#FF9900', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', 
+                '#9900FF', '#FF00FF', '#FF6666', '#FFFF66', '#66FF66', '#66FFFF', 
+                '#6666FF', '#FF66FF', '#CC0000', '#CC9900', '#CCCC00', '#00CC00', 
+                '#00CCCC', '#0000CC', '#9900CC', '#CC00CC', '#CC6666', '#CCCC66', 
+                '#66CC66', '#66CCCC', '#6666CC', '#CC66CC', '#990000', '#996600', 
+                '#999900', '#009900', '#009999', '#000099', '#660099', '#990099', 
+                '#996666', '#999966', '#669966', '#669999', '#666699', '#996699', 
+                '#660000', '#663300', '#666600', '#006600', '#006666', '#000066', 
+                '#330066', '#660066', '#663333', '#666633', '#336633', '#336666', 
+                '#333366', '#663366', '#330000', '#333300', '#333333', '#003300', 
+                '#003333', '#000033', '#330033', '#330033'
+            ];
+            
+            // Predefined gradient presets
+            const gradientPresets = [
+                'linear-gradient(135deg, #6a11cb, #2575fc)',
+                'linear-gradient(135deg, #f093fb, #f5576c)',
+                'linear-gradient(135deg, #4facfe, #00f2fe)',
+                'linear-gradient(135deg, #43e97b, #38f9d7)',
+                'linear-gradient(135deg, #fa709a, #fee140)',
+                'linear-gradient(135deg, #a8edea, #fed6e3)',
+                'linear-gradient(135deg, #ff9a9e, #fad0c4)',
+                'linear-gradient(135deg, #a18cd1, #fbc2eb)',
+                'linear-gradient(135deg, #fad0c4, #ffd1ff)',
+                'linear-gradient(135deg, #ffecd2, #fcb69f)',
+                'linear-gradient(135deg, #ff8177, #ff867a)',
+                'linear-gradient(135deg, #74ebd5, #9face6)'
+            ];
+            
+            // Initialize color picker
+            const colorPickerDisplay = document.getElementById('colorPickerDisplay');
+            const colorPickerDropdown = document.getElementById('colorPickerDropdown');
+            const colorPreview = document.getElementById('colorPreview');
+            const colorValue = document.getElementById('colorValue');
+            
+            // Set initial color
+            colorPreview.style.background = selectedColor;
+            colorValue.textContent = selectedColor;
+            
+            // Toggle color picker dropdown
+            colorPickerDisplay.addEventListener('click', function() {
+                colorPickerDropdown.classList.toggle('active');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!colorPickerDisplay.contains(event.target) && !colorPickerDropdown.contains(event.target)) {
+                    colorPickerDropdown.classList.remove('active');
+                }
+            });
+            
+            // Color tabs
+            const colorTabs = document.querySelectorAll('.color-tab');
+            const colorTabContents = document.querySelectorAll('.color-tab-content');
+            
+            colorTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-color-tab');
+                    
+                    colorTabs.forEach(t => t.classList.remove('active'));
+                    colorTabContents.forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Generate solid color swatches
+            const solidSwatchGrid = document.getElementById('solidSwatchGrid');
+            solidColors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'swatch';
+                swatch.style.backgroundColor = color;
+                swatch.setAttribute('data-color', color);
+                
+                if (color === '#6a11cb') {
+                    swatch.classList.add('selected');
+                }
+                
+                solidSwatchGrid.appendChild(swatch);
+                
+                // Add click event to swatch
+                swatch.addEventListener('click', function() {
+                    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const color = this.getAttribute('data-color');
+                    selectedColor = color;
+                    colorPreview.style.background = color;
+                    colorValue.textContent = color;
+                });
+            });
+            
+            // Generate gradient presets
+            const gradientPresetsContainer = document.getElementById('gradientPresets');
+            gradientPresets.forEach(gradient => {
+                const preset = document.createElement('div');
+                preset.className = 'gradient-preset';
+                preset.style.background = gradient;
+                preset.setAttribute('data-gradient', gradient);
+                
+                if (gradient === selectedColor) {
+                    preset.style.border = '2px solid #333';
+                }
+                
+                gradientPresetsContainer.appendChild(preset);
+                
+                // Add click event to preset
+                preset.addEventListener('click', function() {
+                    document.querySelectorAll('.gradient-preset').forEach(p => p.style.border = '1px solid #ddd');
+                    this.style.border = '2px solid #333';
+                    
+                    const gradient = this.getAttribute('data-gradient');
+                    selectedColor = gradient;
+                    colorPreview.style.background = gradient;
+                    colorValue.textContent = gradient;
+                    
+                    // Update gradient controls
+                    updateGradientControls(gradient);
+                });
+            });
+            
+            // Gradient controls
+            const gradientStart = document.getElementById('gradientStart');
+            const gradientEnd = document.getElementById('gradientEnd');
+            const gradientDirection = document.getElementById('gradientDirection');
+            const gradientPreview = document.getElementById('gradientPreview');
+            
+            // Set initial gradient preview
+            gradientPreview.style.background = selectedColor;
+            
+            // Update gradient when controls change
+            function updateGradient() {
+                const start = gradientStart.value;
+                const end = gradientEnd.value;
+                const direction = gradientDirection.value;
+                
+                const gradient = `linear-gradient(${direction}, ${start}, ${end})`;
+                selectedColor = gradient;
+                colorPreview.style.background = gradient;
+                colorValue.textContent = gradient;
+                gradientPreview.style.background = gradient;
+            }
+            
+            gradientStart.addEventListener('input', updateGradient);
+            gradientEnd.addEventListener('input', updateGradient);
+            gradientDirection.addEventListener('change', updateGradient);
+            
+            // Update gradient controls based on gradient string
+            function updateGradientControls(gradient) {
+                // Parse gradient string to extract colors and direction
+                const match = gradient.match(/linear-gradient\(([^,]+),\s*([^,]+),\s*([^)]+)\)/);
+                if (match) {
+                    const direction = match[1].trim();
+                    const startColor = match[2].trim();
+                    const endColor = match[3].trim();
+                    
+                    gradientDirection.value = direction;
+                    gradientStart.value = startColor;
+                    gradientEnd.value = endColor;
+                    
+                    gradientPreview.style.background = gradient;
+                }
+            }
+            
+            // Initialize gradient controls
+            updateGradientControls(selectedColor);
+            
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    if (tabId === 'categories') {
+                        renderCategories();
+                    }
+                });
+            });
+            
+            // Function to extract domain from URL
+            function extractDomain(url) {
+                try {
+                    // If URL doesn't start with http/https, add it
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+                    const domain = new URL(url).hostname;
+                    // Remove www. prefix if exists
+                    return domain.replace(/^www\./, '');
+                } catch (e) {
+                    return '';
+                }
+            }
+            
+            // Function to get favicon URL
+            function getFaviconUrl(domain) {
+                if (!domain) return '';
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            }
+            
+            // Function to check if a URL is from a known service
+            function isKnownService(url) {
+                const domain = extractDomain(url);
+                const knownServices = [
+                    'youtube.com', 'facebook.com', 'twitter.com', 'instagram.com',
+                    'linkedin.com', 'github.com', 'stackoverflow.com', 'leetcode.com',
+                    'amazon.com', 'google.com', 'reddit.com', 'wikipedia.org',
+                    'netflix.com', 'spotify.com', 'discord.com', 'twitch.tv'
+                ];
+                
+                return knownServices.includes(domain);
+            }
+            
+            // Generate logo button
+            const generateBtn = document.getElementById('generateBtn');
+            const websiteLinkInput = document.getElementById('websiteLink');
+            const logoNameInput = document.getElementById('logoName');
+            const logoCategorySelect = document.getElementById('logoCategory');
+            const newCategoryInput = document.getElementById('newCategory');
+            const logoContainer = document.getElementById('logoContainer');
+            const logoLink = document.getElementById('logoLink');
+            const logoText = document.getElementById('logoText');
+            const logoImage = document.getElementById('logoImage');
+            const logoUrl = document.getElementById('logoUrl');
+            const logoCategoryDisplay = document.getElementById('logoCategoryDisplay');
+            const saveLogoBtn = document.getElementById('saveLogoBtn');
+            
+            generateBtn.addEventListener('click', function() {
+                const link = websiteLinkInput.value.trim();
+                const name = logoNameInput.value.trim();
+                const category = logoCategorySelect.value;
+                const newCategory = newCategoryInput.value.trim();
+                
+                if (!link || !name) {
+                    showNotification('Please enter both a link and a name', true);
+                    return;
+                }
+                
+                if (!category && !newCategory) {
+                    showNotification('Please select or create a category', true);
+                    return;
+                }
+                
+                // Ensure the link has a protocol
+                let formattedLink = link;
+                if (!formattedLink.startsWith('http://') && !formattedLink.startsWith('https://')) {
+                    formattedLink = 'https://' + formattedLink;
+                }
+                
+                // Extract domain and get favicon
+                const domain = extractDomain(formattedLink);
+                const faviconUrl = getFaviconUrl(domain);
+                const knownService = isKnownService(formattedLink);
+                
+                // Update the logo
+                logoLink.href = formattedLink;
+                logoUrl.textContent = formattedLink;
+                
+                // Show favicon if it's a known service, otherwise show text
+                if (knownService) {
+                    logoImage.src = faviconUrl;
+                    logoImage.style.display = 'block';
+                    logoText.style.display = 'none';
+                    
+                    // Handle image loading error
+                    logoImage.onerror = function() {
+                        this.style.display = 'none';
+                        logoText.style.display = 'block';
+                        logoText.textContent = name.charAt(0);
+                        logoLink.style.background = selectedColor;
+                    };
+                } else {
+                    logoImage.style.display = 'none';
+                    logoText.style.display = 'block';
+                    logoText.textContent = name.charAt(0);
+                    logoLink.style.background = selectedColor;
+                }
+                
+                let categoryName = category;
+                if (newCategory) {
+                    categoryName = newCategory;
+                    
+                    // Add new category if it doesn't exist
+                    if (!categories.find(c => c.name === newCategory)) {
+                        categories.push({
+                            id: Date.now(),
+                            name: newCategory,
+                            color: selectedColor
+                        });
+                        localStorage.setItem('logoCategories', JSON.stringify(categories));
+                        updateCategorySelect();
+                    }
+                }
+                
+                logoCategoryDisplay.textContent = `Category: ${categoryName}`;
+                logoCategoryDisplay.style.color = getCategoryColor(categoryName);
+                
+                // Show the logo container
+                logoContainer.style.display = 'block';
+                logoContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                showNotification('Logo generated successfully!');
+            });
+            
+            // Save logo button
+            saveLogoBtn.addEventListener('click', function() {
+                const link = websiteLinkInput.value.trim();
+                const name = logoNameInput.value.trim();
+                const category = logoCategorySelect.value || newCategoryInput.value.trim();
+                
+                if (!link || !name || !category) {
+                    showNotification('Missing information', true);
+                    return;
+                }
+                
+                // Ensure the link has a protocol
+                let formattedLink = link;
+                if (!formattedLink.startsWith('http://') && !formattedLink.startsWith('https://')) {
+                    formattedLink = 'https://' + formattedLink;
+                }
+                
+                // Extract domain and get favicon
+                const domain = extractDomain(formattedLink);
+                const knownService = isKnownService(formattedLink);
+                
+                // Add new logo
+                logos.push({
+                    id: Date.now(),
+                    name: name,
+                    url: formattedLink,
+                    category: category,
+                    color: getCategoryColor(category),
+                    isKnownService: knownService,
+                    domain: domain
+                });
+                
+                localStorage.setItem('personalLogos', JSON.stringify(logos));
+                
+                // Reset form
+                websiteLinkInput.value = '';
+                logoNameInput.value = '';
+                logoCategorySelect.value = '';
+                newCategoryInput.value = '';
+                logoContainer.style.display = 'none';
+                
+                showNotification('Logo saved successfully!');
+            });
+            
+            // Add category button
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            const categoryNameInput = document.getElementById('categoryName');
+            
+            addCategoryBtn.addEventListener('click', function() {
+                const name = categoryNameInput.value.trim();
+                
+                if (!name) {
+                    showNotification('Please enter a category name', true);
+                    return;
+                }
+                
+                if (categories.find(c => c.name === name)) {
+                    showNotification('Category already exists', true);
+                    return;
+                }
+                
+                categories.push({
+                    id: Date.now(),
+                    name: name,
+                    color: selectedColor
+                });
+                
+                localStorage.setItem('logoCategories', JSON.stringify(categories));
+                categoryNameInput.value = '';
+                renderCategories();
+                updateCategorySelect();
+                showNotification('Category added successfully!');
+            });
+            
+            // Helper functions
+            function showNotification(message, isError = false) {
+                const notification = document.getElementById('notification');
+                const notificationText = document.getElementById('notificationText');
+                
+                notificationText.textContent = message;
+                notification.className = 'notification';
+                
+                if (isError) {
+                    notification.classList.add('error');
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            function updateCategorySelect() {
+                logoCategorySelect.innerHTML = '<option value="">Select a category</option>';
+                
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = category.name;
+                    logoCategorySelect.appendChild(option);
+                });
+            }
+            
+            function getCategoryColor(categoryName) {
+                const category = categories.find(c => c.name === categoryName);
+                return category ? category.color : 'linear-gradient(135deg, #6a11cb, #2575fc)';
+            }
+            
+            function renderCategories() {
+                const categoryList = document.getElementById('categoryList');
+                
+                if (categories.length === 0) {
+                    categoryList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No categories yet. Create your first category!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                categoryList.innerHTML = '';
+                
+                categories.forEach(category => {
+                    const categoryCard = document.createElement('div');
+                    categoryCard.className = 'category-card';
+                    
+                    const logoCount = logos.filter(logo => logo.category === category.name).length;
+                    
+                    categoryCard.innerHTML = `
+                        <div class="category-name">
+                            <span class="category-color" style="background: ${category.color}"></span>
+                            ${category.name}
+                        </div>
+                        <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                            ${logoCount} logo${logoCount !== 1 ? 's' : ''}
+                        </div>
+                        <div class="category-actions">
+                            <button class="btn-small btn-danger" data-id="${category.id}">Delete</button>
+                        </div>
+                    `;
+                    
+                    categoryList.appendChild(categoryCard);
+                    
+                    // Delete category button
+                    const deleteBtn = categoryCard.querySelector('.btn-danger');
+                    deleteBtn.addEventListener('click', function() {
+                        const categoryId = parseInt(this.getAttribute('data-id'));
+                        
+                        // Check if category has logos
+                        const hasLogos = logos.some(logo => logo.category === category.name);
+                        
+                        if (hasLogos) {
+                            showNotification('Cannot delete category with logos', true);
+                            return;
+                        }
+                        
+                        categories = categories.filter(c => c.id !== categoryId);
+                        localStorage.setItem('logoCategories', JSON.stringify(categories));
+                        renderCategories();
+                        updateCategorySelect();
+                        showNotification('Category deleted successfully!');
+                    });
+                });
+            }
+            
+            // Initialize
+            updateCategorySelect();
+            renderCategories();
+        });
+    </script>
+</body>
+</html>
